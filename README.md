@@ -1,59 +1,118 @@
-# LotannaApp
+# Angular Assignment - Lotanna App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.9.
+I created a simple Angular application built for ITE-5425, demonstrating client-side routing, a public API integration via Angular services/HttpClient, and a reactive form with validation.
 
-## Development server
+**Live site:** https://2026-summer-ite-5425-0na.github.io/angular-assignment-cholovitolo/
 
-To start a local development server, run:
+**Repo:** https://github.com/2026-Summer-ITE-5425-0NA/angular-assignment-cholovitolo
+
+---
+
+## Tech Stack
+
+- Angular 22 (standalone components)
+- Angular Router
+- Angular HttpClient
+- Reactive Forms (`@angular/forms`)
+
+- Deployed via `angular-cli-ghpages` to GitHub Pages
+
+---
+
+## Project Setup
+
+The project was created using the Angular CLI:
 
 ```bash
+ng new lotanna-app
+```
+
+Routing was enabled at project creation, generating `app.routes.ts` and wiring it into `app.config.ts` via `provideRouter(routes)`.
+
+---
+
+## Client-Side Navigation
+
+A navigation bar sits at the top of every page (`app.html`), with three links using `routerLink`:
+
+- **Home** (`/`)
+- **API Data** (`/api-data`)
+- **Form Page** (`/form-page`)
+
+Routes are defined in `app.routes.ts` and rendered into a `<router-outlet>` in `app.html`, so navigating between pages does not trigger a full page reload.
+
+---
+
+## Pages
+
+### Home Page (`/`)
+A simple landing page with introductory text describing the app.
+
+### API Data Page (`/api-data`)
+Fetches and displays the first 10 posts from the [JSONPlaceholder](https://jsonplaceholder.typicode.com/posts) public API. Data is retrieved through `PostService` and rendered using the `async` pipe, so the page updates automatically once data arrives.
+
+### Form Page (`/form-page`)
+A reactive feedback form with four fields:
+
+| Field | Validation |
+|---|---|
+| Name | Required |
+| Email | Required, valid email format |
+| Rating (1–5) | Required |
+| Comments | Required |
+
+Validation errors are shown inline once a field is touched, and the submit button stays disabled until the form is valid. On successful submit, a "Thank you for your feedback!" message is displayed.
+
+---
+
+## Angular Service & HttpClient
+
+API requests are handled by a dedicated service rather than calling `HttpClient` directly from a component:
+
+- **`src/app/services/post.ts`** — `PostService` class
+  - `getPosts()`: returns an `Observable<Post[]>` fetched from JSONPlaceholder using `HttpClient.get()`
+
+`HttpClient` is enabled app-wide via `provideHttpClient()` in `app.config.ts`.
+
+The `api-data` component injects `PostService` and consumes `getPosts()` through the `async` pipe in its template, rather than manually subscribing.
+
+---
+
+## Project Structure
+
+```
+src/app/
+├── home/            # Home page component
+├── api-data/         # API Data page component
+├── form-page/        # Form Page component
+├── services/
+│   └── post.ts       # PostService (HttpClient logic)
+├── app.routes.ts      # Route definitions
+├── app.config.ts      # App-wide providers (router, HttpClient)
+├── app.html           # Root template (nav bar + router-outlet)
+└── app.ts             # Root component
+```
+
+---
+
+## Running Locally
+
+```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Visit `http://localhost:4200`.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Build & Deployment
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The app is built and deployed to GitHub Pages using `angular-cli-ghpages`:
 
 ```bash
-ng generate --help
+ng add angular-cli-ghpages
+ng deploy --base-href=/angular-assignment-cholovitolo/
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This runs a production build (`ng build`) and pushes the compiled output to the `gh-pages` branch, which GitHub Pages serves directly.
