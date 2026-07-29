@@ -1,0 +1,40 @@
+<h2>Feedback Form</h2>
+
+<form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" *ngIf="!submitted">
+  <label for="name">Name:</label>
+  <input id="name" type="text" formControlName="name" />
+  <p class="error" *ngIf="feedbackForm.get('name')?.invalid && feedbackForm.get('name')?.touched">
+    Name is required.
+  </p>
+
+  <label for="email">Email:</label>
+  <input id="email" type="email" formControlName="email" />
+  <p class="error" *ngIf="feedbackForm.get('email')?.invalid && feedbackForm.get('email')?.touched">
+    Please enter a valid email address.
+  </p>
+
+  <label for="rating">Rating (1-5):</label>
+  <select id="rating" formControlName="rating">
+    <option value="">Select a rating</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+  </select>
+  <p class="error" *ngIf="feedbackForm.get('rating')?.invalid && feedbackForm.get('rating')?.touched">
+    Please select a rating.
+  </p>
+
+  <label for="comments">Comments:</label>
+  <textarea id="comments" formControlName="comments"></textarea>
+  <p class="error" *ngIf="feedbackForm.get('comments')?.invalid && feedbackForm.get('comments')?.touched">
+    Comments are required.
+  </p>
+
+  <button type="submit" [disabled]="feedbackForm.invalid">Submit</button>
+</form>
+
+<div *ngIf="submitted">
+  <p>Thank you for your feedback!</p>
+</div>

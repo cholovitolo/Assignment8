@@ -1,3 +1,10 @@
 import { Routes } from '@angular/router';
+import { Home } from './home/home';
+import { ApiData } from './api-data/api-data';
+import { FormPage } from './form-page/form-page';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  { path: '', component: Home },
+  { path: 'api-data', component: ApiData },
+  { path: 'form-page', component: FormPage }
+];
